@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Records</title>
+</head>
+<body>
+
+<h1>Notes</h1>
+{% for record in records %}
+<div>
+    <p>{{ record.body }}</p>
+</div>
+{% endfor %}
+<form action="/add/" method="post">
+	{% csrf_token %}
+	<label for="body">Description:</label></br>
+	<input type="text" id="body" name="body" rows=4 required></br>
+	<input type="submit" value="submit">
+</form>
+</body>
+</html>
