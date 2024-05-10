@@ -9,8 +9,11 @@ This program is created as a part of the Cyber Security Base 2024 -course. The m
 ###  Running the program
 
 0. Clone the reository and move to project directory: `git clone <repository_url_goes here>` and `cd scaling-happiness/project` 
-1. Run the server: `python3 manage.py runserver` 
-2. Test each vulnerability by setting `PATCHN = False` in the `project/med/views.py`-file. (N is an integer from 0 to 2)
+1. Install required packages using `pip3 install -r requirements.txt`
+2. Run the server: `python3 manage.py runserver` (or `python3 manage.py runsslserver --certificate cert.pem --key key.pem` for encrypted version)
+  - If sslserver is run you must give a PEM pass phrase which is `cybermooc`
+3. Test each vulnerability by setting `PATCHN = False` in the `project/med/views.py`-file. 
+4. Test encrypted messaging using tcpdump. (I have included sample run results in `project/ssl.txt` and `project/nossl.txt` )
 
 ## Vulnerabilities:
 
@@ -172,3 +175,9 @@ Logging in while using ssl encryption:
  63         0x0330:  02eb 7956 6477 99e6 52eb 827b 4bb0 fd62  ..yVdw..R..{K..b
  64         0x0340:  a740 6746 d53f                           .@gF.?
 ```
+
+### 4. Identification and Authentication Failures
+
+Program did not enforce good password hygine when creating a new user.
+
+Fix: Check for common password ([10k-most-common.txt](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10k-most-common.txt)) and require length and complexity (numbers and letters)

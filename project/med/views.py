@@ -10,6 +10,7 @@ from med.models import Records
 PATCH0 = True
 PATCH1 = True
 PATCH2 = True
+PATCH4 = True
 
 def add(request):
     if request.method == "POST":
@@ -100,10 +101,31 @@ def log(request):
         return render(request, 'med/log.html', {'data': log_data})
     return redirect('/')
 
+def goodPassword(username, password):
+    isdig = False
+    for c in password:
+        if c.isdigit():
+           isdig = True
+    inMostCommon = False
+    with open("mostcommon.txt", "r") as common_file:
+        for line in common_file:
+            if password in line:
+                print(line, password)
+                inMostCommon = True
+                break
+
+    return inMostCommon, len(password) >= 8 and isdig and username not in password and not inMostCommon
 
 def create_users(request):
     username = request.POST.get('username')
     password = request.POST.get('password')    
+    common, good = goodPassword(username, password)
+    if PATCH4 and not good:
+       if not common: 
+           messages.warning(request, f"Password must contain at least 8 characters and at least one of them has to be a digiut. Also username cannot be included in the password.")
+       else: 
+           messages.warning(request, f"Password was in most common 10K list. Lets not use that one!")
+       return redirect('/')
     if not User.objects.filter(username=username).exists():
        User.objects.create_user(username=username, password=password)
        messages.success(request, f"Created user {username}")

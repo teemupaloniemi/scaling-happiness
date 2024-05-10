@@ -30,3 +30,18 @@
 ==== 05/10/2024 - 16:52:04 | bob logged out ====
 ==== 05/10/2024 - 16:53:36 | kissa logged in ====
 ==== 05/10/2024 - 16:53:45 | kissa logged out ====
+==== 05/10/2024 - 17:26:06 | Attempt to login without existing user username=admin password=secret ====
+==== 05/10/2024 - 17:26:06 | Login attemp with wrong method ====
+==== 05/10/2024 - 17:30:35 | Attempt to login without existing user username=bob password=squarepants ====
+==== 05/10/2024 - 17:30:35 | Login attemp with wrong method ====
+==== 05/10/2024 - 17:31:04 | bob logged in ====
+==== 05/10/2024 - 17:31:28 | bob requested data with user id 41 ====
+==== 05/10/2024 - 17:31:37 | bob logged out ====
+==== 05/10/2024 - 17:40:39 | Attempt to login without existing user username=bob password=squarepants 8 ====
+==== 05/10/2024 - 17:40:39 | Login attemp with wrong method ====
+==== 05/10/2024 - 17:40:47 | bob logged in ====
+==== 05/10/2024 - 17:40:57 | bob requested data with user id 45 ====
+==== 05/10/2024 - 17:46:50 | bob logged out ====
+==== 05/10/2024 - 17:55:57 | bob logged in ====
+==== 05/10/2024 - 17:56:00 | bob requested data with user id 50 ====
+==== 05/10/2024 - 17:56:06 | bob requested data with user id 50 ====
