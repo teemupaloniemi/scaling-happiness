@@ -1,0 +1,12 @@
+==== 05/10/2024 - 14:10:43 | test requested data with user id 38 ====
+==== 05/10/2024 - 14:10:47 | test logged out ====
+==== 05/10/2024 - 14:10:55 | Attempt to login without existing user username=admin password=secret ====
+==== 05/10/2024 - 14:10:55 | Login attemp with wrong method ====
+==== 05/10/2024 - 14:11:00 | test logged in ====
+==== 05/10/2024 - 14:11:02 | test requested data with user id 38 ====
+==== 05/10/2024 - 14:11:06 | test logged out ====
+==== 05/10/2024 - 14:11:11 | bob logged in ====
+==== 05/10/2024 - 14:11:13 | bob requested data with user id 36 ====
+==== 05/10/2024 - 14:11:17 | bob logged out ====
+==== 05/10/2024 - 14:11:32 | bob logged in ====
+==== 05/10/2024 - 14:12:19 | bob requested data with user id 36 ====

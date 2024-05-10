@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from med.models import Records
 
+PATCH0 = True
+PATCH1 = True
+PATCH2 = True
 
 def add(request):
     if request.method == "POST":
@@ -19,17 +22,20 @@ def clear(request):
 
 
 def getData(request):
-    if request.user and request.user.is_authenticated:
-        #user = request.GET.get('user') # Users can now access eachothers data, by using each others ids.
-        user = request.user.id # patch 1: Use request.user.id instead
-        with open('log.txt', 'a', encoding='utf-8') as log_file:
-            log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | {request.user} requested data with user id {user} ====\n")
+    if request.user and request.user.is_authenticated and request.GET.get('user'):
+        user = request.GET.get('user') # Users can now access eachothers data, by using each others ids.
+        if PATCH0:
+            user = request.user.id # patch 0: Use request.user.id instead
+        if PATCH1:
+            with open('log.txt', 'a', encoding='utf-8') as log_file:
+                log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | {request.user} requested data with user id {user} ====\n")
         records = Records.objects.filter(user=user)
         records_data = [model_to_dict(record) for record in records]
         request.session['records'] = records_data
         return redirect('/')
-    with open('log.txt', 'a', encoding='utf-8') as log_file:
-        log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Unauthenticated user tried to requested data ====\n") 
+    if PATCH1:
+        with open('log.txt', 'a', encoding='utf-8') as log_file:
+            log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Unauthenticated user tried to requested data ====\n") 
     return render(request, 'med/index.html')
 
 
@@ -46,42 +52,51 @@ def login(request):
         password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            with open('log.txt', 'a', encoding='utf-8') as log_file:
-                log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | {user} logged in ====\n")
+            if PATCH1:
+                with open('log.txt', 'a', encoding='utf-8') as log_file:
+                    log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | {user} logged in ====\n")
             django_login(request, user)
             return redirect('/')
-        with open('log.txt', 'a', encoding='utf-8') as log_file:
-            log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Attempt to login without existing user username={username} password={password} ====\n")
+        if PATCH1:
+            with open('log.txt', 'a', encoding='utf-8') as log_file:
+                log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Attempt to login without existing user username={username} password={password} ====\n")
 
-    log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Login attemp with wrong method ====\n")
+    if PATCH1:
+        with open('log.txt', 'a', encoding='utf-8') as log_file:
+            log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Login attemp with wrong method ====\n")
     return redirect('/')
 
 
 def logout(request):
     if request.user and request.user.is_authenticated:
-        with open('log.txt', 'a', encoding='utf-8') as log_file:
-            log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | {request.user} logged out ====\n")
+        if PATCH1:
+            with open('log.txt', 'a', encoding='utf-8') as log_file:
+                log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | {request.user} logged out ====\n")
         django_logout(request)
         return redirect('/')
-    with open('log.txt', 'a', encoding='utf-8') as log_file:
-        log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Unauthenticated user tied loggig out ====\n")     
+    if PATCH1:
+        with open('log.txt', 'a', encoding='utf-8') as log_file:
+            log_file.write(f"==== {time.strftime('%m/%d/%Y', time.localtime(time.time()))} - { time.strftime('%H:%M:%S', time.localtime(time.time())) } | Unauthenticated user tied loggig out ====\n")     
+
     return redirect('/')
 
 
 # pathc 2: helper for log tests
 def isadmin(user):
+    if PATCH2:
         return user.is_authenticated and user.is_staff
+    return True
 
-
-@login_required # patch 2: this way only authenticated users can see the logs
+@login_required
 @user_passes_test(isadmin, login_url='/') # patch 2: only admin is allowed to see the logs
 def log(request):
-    log_data = []
-    with open('log.txt', 'r', encoding='utf-8') as log_file:
-        for line in log_file:
-            log_data.append(line)
-    return render(request, 'med/log.html', {'data': log_data})
-
+    if PATCH1:
+        log_data = []
+        with open('log.txt', 'r', encoding='utf-8') as log_file:
+            for line in log_file:
+                log_data.append(line)
+        return render(request, 'med/log.html', {'data': log_data})
+    return redirect('/')
 
 def create_users(request):
     User.objects.create_user(username='bob', password='squarepants')
