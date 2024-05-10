@@ -8,7 +8,7 @@ This program is created as a part of the Cyber Security Base 2024 -course. The m
 
 ###  Running the program
 
-0. Clone the reository and move to project directory: `git clone <repository_url_goes here>` and `cd project` 
+0. Clone the reository and move to project directory: `git clone <repository_url_goes here>` and `cd scaling-happiness/project` 
 1. Run the server: `python3 manage.py runserver` 
 2. Test each vulnerability by setting `PATCHN = False` in the `project/med/views.py`-file. (N is an integer from 0 to 2)
 
