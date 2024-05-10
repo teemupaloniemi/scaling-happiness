@@ -1,0 +1,48 @@
+LINK: https://github.com/teemupaloniemi/scaling-happiness.git
+The README.md file should have enough instructions to get started.
+
+
+FLAW 1 Injection:
+
+https://github.com/teemupaloniemi/scaling-happiness/blob/1ceabe1eda634d3cab1d13bc5ac7ad53e89f47d9/project/med/views.py#L28
+
+In this vulnerability the user id which is used for quering the database is given in the client side and therefore easily hackable by the user. For example if the user wanted to see other users' records it is possible by looping trough different user ids in the database query (localhost:8000/getData/?user=any_id_I_want) and waiting for one that exists and isn't users own. Altought very small in size this vulnerability is quite crucial to the security of the program. OWASP defines injection possibility when "User-supplied data is not validated, filtered, or sanitized by the application." and line 28 falls right into that category. [1] 
+
+This was fixed by utilizing the django build in request.user.id attribute which can be inferred in the server side thererfore not allowing the user to modify their query. An other way would be to remain the current architecture but add a validation for the id such that it matches the user performing the query. By doing this the program also reduces the traffic over the internet which could be captured and seen by man-in-the-middle attacks.  
+
+
+FLAW 2 Security Logging and Monitoring Failures:
+https://github.com/teemupaloniemi/scaling-happiness/blob/1ceabe1eda634d3cab1d13bc5ac7ad53e89f47d9/project/med/views.py#L39C1-L40C209
+
+Lets start this vulnerability by defining the problem. OWASP states that Security Logging and Monitoring Failures appear when "Auditable events, such as logins, failed logins, and high-value transactions, are not logged".[1] This can be seen even in the case of the last vulnerability which was hard to catch withput logging for user data transactions, logins, etc. Also reoccouring request such as DOS attacks or password bruteforce attacks were not easily detecteble without logging. 
+
+The mentioned line is just one of many that help to fix the problem. In detail the logging problem was fixed using -- altpugh not ideal still viable -- locally saved log.txt file that contained times and users of their activities such as logging and data requests. Also a admin panel for the log data was created under localhost:8000/log.   
+
+
+FLAW 3 Broken access control:
+https://github.com/teemupaloniemi/scaling-happiness/blob/1ceabe1eda634d3cab1d13bc5ac7ad53e89f47d9/project/med/views.py#L94
+
+As a result of last vulnerabilityfix another was raised. Users who were not supposed to see the program logs were able to see them. The admin view of the logs included sensitive inforamtion like user ids, username-password combinations and times of activity. This goes under broken access control as OWASP defines it to include "Violation of the principle of least privilege or deny by default, where access should only be granted for particular capabilities, roles, or users, but is available to anyone".[1] 
+
+This vulnerability was fixed by making a validator for the users admin privilliges. This was done by using djangos function decorators that allow to run test before executing it and djangos build in superuser creator (created by running python3 manage.py createsuperuser).  
+
+
+FLAW 4 Data encryption:
+https://github.com/teemupaloniemi/scaling-happiness/blob/1ceabe1eda634d3cab1d13bc5ac7ad53e89f47d9/project/project/settings.py#L40
+https://github.com/teemupaloniemi/scaling-happiness/blob/1ceabe1eda634d3cab1d13bc5ac7ad53e89f47d9/requirements.txt#L2
+
+Because the traffic between client and server side was not encrypted a man-in-the-middle attack could have easily captured sensitive information from the communication packages. Data that could be captured included usernames, passwords, and user records. Giving line numbers for this vulnerability was quite hard has it is so embedded in the django framework, but I will try my best in describying what was done and why. This is detailed in the second place of the OWASP top ten listing for exmaple as data that is "transmitted in clear text".[1] 
+
+I created a self-signed certificate using openssl command line tool.[2] Then I installed django-sslserver module that allows for using ssl certificates in django project. Now when running the program with the encryption ensures that user data is securely encrypted. Testing and validating this was quite tricky but by using tcpdump program to listen a login by the user when using an ssl encryption and without allowed to compare between the two different cases.[3] From the not encrypted communication the user password and usernames were clearly visible when as in the encrypted version this was not possible. More detailed description is given in the project README.md file.       
+
+
+FLAW 5:
+https://github.com/teemupaloniemi/scaling-happiness/blob/1ceabe1eda634d3cab1d13bc5ac7ad53e89f47d9/project/med/views.py#L104
+
+Finally even when the program is well designed its users may pose a serious vulnerability risk. The program did not enforce any best practices on the user creation and especially username password selection. This is defined in Identification and Authentication Failures -section of the OWASP top ten listing as "Permits default, weak, or well-known passwords, such as "Password1" or "admin/admin"". Now users could create vulnerable accounts and potentially giving access to unwanted actors to the program. 
+
+Therefore I added a goodPassword checker for the user creation. The checker has four requirements. The password must be at least 8 characters long; The password has to contain at least one digit; The password should not contain the username; and the password cannot be in a listing of 10000 most common passwords.   
+
+[1] OWASP top ten 2021 https://owasp.org/www-project-top-ten/
+[2] openSSL https://www.openssl.org/docs/man1.1.1/man1/openssl.html
+[3] tcpdump https://danielmiessler.com/p/tcpdump/
