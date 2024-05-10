@@ -10,3 +10,20 @@
 ==== 05/10/2024 - 14:11:17 | bob logged out ====
 ==== 05/10/2024 - 14:11:32 | bob logged in ====
 ==== 05/10/2024 - 14:12:19 | bob requested data with user id 36 ====
+==== 05/10/2024 - 14:45:48 | bob logged out ====
+==== 05/10/2024 - 14:45:58 | bob logged in ====
+==== 05/10/2024 - 14:47:01 | bob logged out ====
+==== 05/10/2024 - 14:55:06 | bob logged in ====
+==== 05/10/2024 - 15:01:16 | bob logged out ====
+==== 05/10/2024 - 15:01:37 | bob logged in ====
+==== 05/10/2024 - 15:01:50 | Unauthenticated user tied loggig out ====
+==== 05/10/2024 - 15:04:17 | bob logged out ====
+==== 05/10/2024 - 15:05:02 | bob logged in ====
+==== 05/10/2024 - 15:06:28 | bob logged out ====
+==== 05/10/2024 - 15:06:47 | bob logged in ====
+==== 05/10/2024 - 15:11:09 | bob logged out ====
+==== 05/10/2024 - 15:11:27 | bob logged in ====
+==== 05/10/2024 - 15:13:49 | bob logged out ====
+==== 05/10/2024 - 15:14:02 | bob logged in ====
+==== 05/10/2024 - 15:14:57 | bob logged out ====
+==== 05/10/2024 - 15:15:17 | bob logged in ====
