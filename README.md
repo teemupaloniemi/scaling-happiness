@@ -20,6 +20,8 @@ This program is created as a part of the Cyber Security Base 2024 -course. The m
 
 ## Vulnerabilities:
 
+For testing remember to set all `PATCHN=False`
+
 ### 0. Injection
 
 Client side data is not validated and quering others data is possible. 
@@ -37,17 +39,25 @@ To test this vulnerability:
 8. Run `http://localhost:8000/getData/?user=bobs_user_id_here`
 9. Now you should see bob's data in alices view
 
+Now you can set `PATCH0=True` to fix the vulnerability. This changes the backend behaviour to use request.user.id.
+
 ### 1. Loggin
 
 The program did not log any activity and therefore finding the previous vulnerability (1. Injection) was hard to identify. 
 
 Fix: We created logging for the program. 
 
+To test the fix:
+1. Test the previous vulnerability but set `PATCH1=True`. After test you should see the bob and alice activity in `http://localhost:8000/log`.
+
 ### 2. Broken access control
 
 The previous change introduced a vulnerability that allowed anyone with the right request to see the program logs. 
 
 Fix: We added a check to verify that logs are only visible to the admin users. 
+
+To test the fix:
+1. Test the previous vulnerability but set `PATCH2=True`. After test you should not be allowed to `http://localhost:8000/log` without the superuser (remember to create this).
 
 ### 3. Data encryption 
 
@@ -195,3 +205,11 @@ Logging in while using ssl encryption:
 Program did not enforce good password hygine when creating a new user.
 
 Fix: Check for common password ([10k-most-common.txt](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10k-most-common.txt)) and require length and complexity (numbers and letters)
+
+To test the fix:
+1. Try to create a user with a passwords `kissa`, `squarepants`, and `abcd1234`
+2. Set `PATCH4=True` and try again (with different users because you already have those).
+
+## Utils
+
+Not part of the intended use of the program but you can use `http://localhost:8000/clear` to clear the database for a clean start. 
