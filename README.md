@@ -13,7 +13,9 @@ This program is created as a part of the Cyber Security Base 2024 -course. The m
 2. Create a superuser by running `python3 manage.py createsuperuser`
 3. Run the server: `python3 manage.py runserver` (or `python3 manage.py runsslserver --certificate cert.pem --key key.pem` for encrypted version)
   - If sslserver is run you must give a PEM pass phrase which is `cybermooc`
-3. Test each vulnerability by setting `PATCHN = False` in the `project/med/views.py`-file. 
+3. Test each vulnerability by setting `PATCHN = False` in the `project/med/views.py`-file.
+  - For the course feedback set all patches to False first and start testing over the vulnerabilities following the `essay.txt`-file.
+  - Remember to use `https://localhost:8000` if sslserver is used.
 4. Test encrypted messaging using tcpdump. (I have included sample run results in `project/ssl.txt` and `project/nossl.txt` )
 
 ## Vulnerabilities:
