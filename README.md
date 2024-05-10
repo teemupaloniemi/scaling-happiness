@@ -26,6 +26,17 @@ Client side data is not validated and quering others data is possible.
 
 Fix: We infer the user id from the request and therefore it is not given by user. 
 
+To test this vulnerability:
+1. create a user; username=bob password=squarepants12
+2. create a user; username=alice password=redqueen34
+3. Log in using bob
+4. Create a new note by writing to the text field and hitting add button. (check by pressing show data -button)
+   - You should be able to see bob's user id in the browser network logs
+6. logout of bob by going to `http://localhost:8000/logout`
+7. Log in to alice
+8. Run `http://localhost:8000/getData/?user=bobs_user_id_here`
+9. Now you should see bob's data in alices view
+
 ### 1. Loggin
 
 The program did not log any activity and therefore finding the previous vulnerability (1. Injection) was hard to identify. 
