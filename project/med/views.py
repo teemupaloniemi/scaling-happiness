@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.forms.models import model_to_dict
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.contrib.auth.models import User
 from med.models import Records
@@ -12,11 +13,20 @@ def clear(request):
     User.objects.all().delete()
     return redirect('/')
 
+def getData(request):
+    if request.user and request.user.is_authenticated and request.GET.get('user'):
+        user = request.GET.get('user') # Users can now access eachothers data, by using each others ids.
+        records = Records.objects.filter(user=user)
+        records_data = [model_to_dict(record) for record in records]
+        request.session['records'] = records_data
+        return redirect('/')
+    return render(request, 'med/index.html')
+    
 def home_view(request):
-    if request.user and not request.user.is_anonymous:
-        print(request.user)
-        records = Records.objects.filter(user=request.user)
-        return render(request, 'med/data.html', {"records": records})
+    if request.user and request.user.is_authenticated: 
+        records = request.session.get('records', [])
+        print(records)
+        return render(request, 'med/data.html', {'records': records}) 
     return render(request, 'med/index.html')
 
 def login(request):

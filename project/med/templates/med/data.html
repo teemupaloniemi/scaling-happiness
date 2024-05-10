@@ -13,11 +13,15 @@
     <p>{{ record.body }}</p>
 </div>
 {% endfor %}
+<form action="/getData/" method="get">
+        <input type="hidden" name="user" value="{{ user.id }}">
+	<input type="submit" value="Show my data"/>
+</form>
+</br>
 <form action="/add/" method="post">
 	{% csrf_token %}
 	<label for="body">Description:</label></br>
-	<input type="text" id="body" name="body" rows=4 required></br>
-	<input type="submit" value="submit">
+	<input type="text" id="body" name="body" rows=4 required><input type="submit" value="Add">
 </form>
 </body>
 </html>
