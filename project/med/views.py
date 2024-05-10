@@ -1,4 +1,5 @@
 import time
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.forms.models import model_to_dict
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
@@ -87,6 +88,7 @@ def isadmin(user):
         return user.is_authenticated and user.is_staff
     return True
 
+
 @login_required
 @user_passes_test(isadmin, login_url='/') # patch 2: only admin is allowed to see the logs
 def log(request):
@@ -98,12 +100,13 @@ def log(request):
         return render(request, 'med/log.html', {'data': log_data})
     return redirect('/')
 
+
 def create_users(request):
-    User.objects.create_user(username='bob', password='squarepants')
-    print("created bob squarepants")
-    User.objects.create_user(username='alice', password='redqueen')
-    print("created alice redqueen")
-    User.objects.create_user(username='test', password='test')
-    print("created test test")
- 
+    username = request.POST.get('username')
+    password = request.POST.get('password')    
+    if not User.objects.filter(username=username).exists():
+       User.objects.create_user(username=username, password=password)
+       messages.success(request, f"Created user {username}")
+    else:
+       messages.warning(request, f"User {username} already exists")
     return redirect('/')
