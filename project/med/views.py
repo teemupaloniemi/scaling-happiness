@@ -15,7 +15,8 @@ def clear(request):
 
 def getData(request):
     if request.user and request.user.is_authenticated and request.GET.get('user'):
-        user = request.GET.get('user') # Users can now access eachothers data, by using each others ids.
+        #user = request.GET.get('user') # Users can now access eachothers data, by using each others ids.
+        user = request.user.id # patch 1: Use request.user.id instead
         records = Records.objects.filter(user=user)
         records_data = [model_to_dict(record) for record in records]
         request.session['records'] = records_data

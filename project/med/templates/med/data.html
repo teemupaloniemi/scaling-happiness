@@ -14,7 +14,7 @@
 </div>
 {% endfor %}
 <form action="/getData/" method="get">
-        <input type="hidden" name="user" value="{{ user.id }}">
+        <!-- patch 1: We removed the id from here, no longer needed -->
 	<input type="submit" value="Show my data"/>
 </form>
 </br>
