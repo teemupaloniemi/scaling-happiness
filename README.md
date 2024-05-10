@@ -10,7 +10,8 @@ This program is created as a part of the Cyber Security Base 2024 -course. The m
 
 0. Clone the reository and move to project directory: `git clone <repository_url_goes here>` and `cd scaling-happiness/project` 
 1. Install required packages using `pip3 install -r requirements.txt`
-2. Run the server: `python3 manage.py runserver` (or `python3 manage.py runsslserver --certificate cert.pem --key key.pem` for encrypted version)
+2. Create a superuser by running `python3 manage.py createsuperuser`
+3. Run the server: `python3 manage.py runserver` (or `python3 manage.py runsslserver --certificate cert.pem --key key.pem` for encrypted version)
   - If sslserver is run you must give a PEM pass phrase which is `cybermooc`
 3. Test each vulnerability by setting `PATCHN = False` in the `project/med/views.py`-file. 
 4. Test encrypted messaging using tcpdump. (I have included sample run results in `project/ssl.txt` and `project/nossl.txt` )
